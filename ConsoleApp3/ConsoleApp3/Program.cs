@@ -19,6 +19,11 @@ namespace ConsoleApp3
             foreach (var @group in buddies)
             {
                 var list = @group.ToList();
+                if (list.Count() == 1)
+                {
+                    // group has only one person
+                    continue;
+                }
                 Console.WriteLine($"Buddies in only these films: {string.Join(',', list.First().Films)}");
                 Console.WriteLine(string.Join(',', list.Select(x =>x.Name)));
                 Console.WriteLine();
