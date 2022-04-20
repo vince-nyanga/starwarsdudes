@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ConsoleApp3.Models;
 using ConsoleApp3.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,29 +14,15 @@ namespace ConsoleApp3
             var serviceProvider = ConfigureServices();
             var service = serviceProvider.GetRequiredService<IProvideStarWarsDudes>();
             var dudes = await service.GetCharacters(Url);
-            var dudesList = dudes.ToList();
-            var buddies = new HashSet<Dude>();
-
-            for (int i = 0; i < dudesList.Count - 1 ; i++)
+            var buddies = dudes.GroupBy(x =>x, new DudesEqualityComparer());
+            Console.WriteLine("Buddies");
+            foreach (var @group in buddies)
             {
-                var firstDude = dudesList[i];
-                var hasBuddies = false;
-                for (int j = i+1; j < dudes.Count(); j++)
-                {
-                    var otherDude = dudesList[i];
-                    if (firstDude.IsBuddie(otherDude))
-                    {
-                        hasBuddies = true;
-                        buddies.Add(otherDude);
-                    }
-                }
-
-                if (hasBuddies)
-                {
-                    buddies.Add(firstDude);
-                }
+                var list = @group.ToList();
+                Console.WriteLine($"Buddies in only these films: {string.Join(',', list.First().Films)}");
+                Console.WriteLine(string.Join(',', list.Select(x =>x.Name)));
+                Console.WriteLine();
             }
-
         }
 
         private static IServiceProvider ConfigureServices()

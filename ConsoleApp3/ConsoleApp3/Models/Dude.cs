@@ -11,7 +11,8 @@ namespace ConsoleApp3.Models
 
         public bool IsBuddie(Dude other)
         {
-            return Films.Count() == other.Films.Count() && other.Films.Intersect(Films).Any();
+            var otherCount = other.Films.ToList().Count;
+            return Films.Count() == other.Films.Count();
         }
 
         public override int GetHashCode()
